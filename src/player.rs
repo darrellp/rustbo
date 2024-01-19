@@ -1,5 +1,4 @@
 use super::card_stack::CardStack;
-use super::game::Game;
 
 pub(crate) struct Player {
     hand: CardStack,

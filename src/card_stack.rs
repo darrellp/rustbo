@@ -6,7 +6,7 @@ use rand::thread_rng;
 
 #[derive(Clone)]
 pub(crate) struct CardStack {
-    cards: Vec<Card>,
+    pub(crate) cards: Vec<Card>,
 }
 
 impl CardStack {
@@ -14,7 +14,7 @@ impl CardStack {
         let mut ret = vec![];
 
 
-        for i_rank in 1..12 {
+        for i_rank in 1..=12 {
             let mut rank_cards = vec![Card::Ranked(i_rank as u8);12];
             ret.append(&mut rank_cards);
         }
@@ -43,17 +43,17 @@ impl CardStack {
     }
 
     #[inline]
-    pub fn peek(&self) -> Option<&Card> {
+    pub fn peek(&self) -> Option<Card> {
         if self.len() == 0 {
             None
         }
         else {
-            Some(&self.cards[self.len() - 1])
+            Some(self.cards[self.len() - 1])
         }
     }
 
     pub fn deal_off(&mut self, n: usize) -> CardStack {
-        let cards = self.cards.split_off(n);
+        let cards = self.cards.split_off(self.len() - n);
         CardStack{cards}
     }
 }
