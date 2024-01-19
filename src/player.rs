@@ -1,11 +1,14 @@
+use crate::game::Game;
 use super::card_stack::CardStack;
 
+#[derive(Clone)]
 pub(crate) struct Player {
-    hand: CardStack,
-    discards: Vec<CardStack>,
-    draw_stack: CardStack,
-    game_index: usize,
+    pub(crate) hand: CardStack,
+    pub(crate) discards: Vec<CardStack>,
+    pub(crate) draw_stack: CardStack,
+    pub(crate) game_index: usize,
 }
+
 
 impl Player {
     pub fn deal(deck: &mut CardStack, player_count: usize, index: usize) -> Self {
@@ -20,5 +23,18 @@ impl Player {
             draw_stack,
             game_index
         }
+    }
+
+    pub fn empty() -> Self {
+        Self {
+            hand: CardStack::new(),
+            discards: vec![CardStack::new();4],
+            draw_stack: CardStack::new(),
+            game_index: 0
+        }
+    }
+
+    pub fn make_play(&mut self, game: &mut Game) {
+
     }
 }

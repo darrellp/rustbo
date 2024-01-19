@@ -1,5 +1,5 @@
 extern crate rand;
-
+use std::str::FromStr;
 use rand::prelude::SliceRandom;
 use super::card::*;
 use rand::thread_rng;
@@ -32,6 +32,23 @@ impl CardStack {
         Self { cards }
     }
 
+    // Takes string of format "1 2 S 10 12" and produces a stack with the corresponding cards.  The
+    // leftmost element of the string is the bottom card and the one on the right is the top card.
+    pub fn from_string(input: &str) -> Self {
+        let mut cards = vec![];
+        let mut card_strings = input.split(' ');
+        for card_rep in card_strings.by_ref() {
+            if card_rep.starts_with('S') {
+                cards.push(Card::Wild);
+            }
+            else {
+                let rank =str::parse::<u8>(card_rep).unwrap();
+                cards.push(Card::Ranked(rank));
+            }
+        }
+        Self { cards }
+    }
+
     #[inline]
     pub fn len(&self) -> usize {
         self.cards.len()
@@ -50,6 +67,15 @@ impl CardStack {
         else {
             Some(self.cards[self.len() - 1])
         }
+    }
+
+    // nth(0) returns the same as peek() - i.e., the top card of the deck
+    #[inline]
+    pub fn nth(&self, n: usize) -> Card {
+        if n >= self.len() {
+            panic!();
+        }
+        self.cards[self.len() - n - 1]
     }
 
     pub fn deal_off(&mut self, n: usize) -> CardStack {
